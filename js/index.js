@@ -1,95 +1,125 @@
+//all global variables
 let life = 5;
 let isGamePlayOn = false;
-const lang = "abcdefghijklmnopqrstuvwxyz".split("");
+const allAlphabets = "abcdefghijklmnopqrstuvwxyz".split("");
 const audio = new Audio();
-console.log(lang);
 
-document.getElementById("play").addEventListener("click", function () {
-  const home = document.getElementById("home");
-  const playGround = document.getElementById("play-ground");
-  playGround.classList.remove("hidden");
-  home.classList.add("hidden");
+//all html objects
+const homeSection = document.getElementById("home"); // The Home Page container
+const playGroundSection = document.getElementById("play-ground"); // game-play container
+const resultSection = document.getElementById("result"); // result container
+const displayContainer = document.getElementById("display"); // result container
+
+// all buttons
+const playBtn = document.getElementById("play"); //play Button
+const restartBtn = document.getElementById("restart-btn"); // restart Button
+const keysBtn = document.getElementsByTagName("kbd"); // all keys in the keyboard container
+
+// all text contents
+const screenText = document.getElementById("screen-text"); // screen text on gameplay
+const scoreCount = document.getElementById("score"); //score on gameplay Nav
+const lifeCount = document.getElementById("life"); //life on gameplay Nav
+const resultCount = document.getElementById("result-count"); //life on gameplay Nav
+
+//Event listener for playBtn
+playBtn.addEventListener("click", function () {
+  playGroundSection.classList.remove("hidden");
+  homeSection.classList.add("hidden");
   isGamePlayOn = true;
   getRandomChar();
 });
 
 function getRandomChar() {
+  //showing a random alphabet on screen
   const random = parseInt((Math.random() * 25).toFixed(0));
-  const randomChar = lang[random];
-  //
-  const screen = document.getElementById("screen");
-  screen.innerText = randomChar;
+  const randomChar = allAlphabets[random];
+  screenText.innerText = randomChar;
 
-  const allkeys = document.getElementsByTagName("kbd");
-  for (let key of allkeys) {
-    if (key.innerText == randomChar.toLowerCase()) {
+  //making the key color orange
+  for (let key of keysBtn) {
+    if (key.innerText.toLowerCase() == randomChar.toLowerCase()) {
       key.style.background = "orange";
     } else {
       key.style.background = "white";
     }
   }
-
-  console.log(randomChar);
+  // random alphabet is showing on screen and key background also changed now
 }
 
+//adding key event To Our whole Document
 document.addEventListener("keyup", (e) => {
+  //checking if user hit enter and game play is not on then it triggering on play buttons
   if (e.key == "Enter" && !isGamePlayOn) {
-    document.getElementById("play").click();
-    document.getElementById("restart-btn").click();
+    playBtn.click();
+    restartBtn.click();
   }
+
+  //if gameplay is not running  then dont run the function
   if (!isGamePlayOn) return;
-  console.log(e.key);
-  const screen = document.getElementById("screen");
-  if (e.key.length == 1 && isNaN(e.key)) {
-    if (e.key.toLowerCase() == screen.innerText.toLowerCase()) {
-      //   screen.innerText = "KILLED";
+
+  //the scoring system will work  if user hit only on the buttons that are alphabets
+
+  if (allAlphabets.indexOf(e.key.toLowerCase()) != -1) {
+    //true-block::  if user hit in the right button showing on screen
+    if (e.key.toLowerCase() == screenText.innerText.toLowerCase()) {
+      //success audio will sound
       audio.src = "./../assests/audio/success.mp3";
       audio.play();
-      const score = document.getElementById("score");
-      score.innerText = parseInt(score.innerText) + 1;
 
-      //   setTimeout(() => {
-      //     getRandomChar();
-      //   }, 500);
+      //score incrementing
+      scoreCount.innerText = parseInt(scoreCount.innerText) + 1;
+
+      //it will call the function again for changing the alphabet
       getRandomChar();
-    } else {
+      return;
+    }
+    //false block:: if user hit on the wrong key
+    else {
+      //error audio will sound
       audio.src = "./../assests/audio/wrong.mp3";
       audio.play();
-      const lifeContainer = document.getElementById("life");
-      lifeContainer.innerText = parseInt(lifeContainer.innerText) - 1;
+      //life and global variable for life  are decrementing
+      lifeCount.innerText = parseInt(lifeCount.innerText) - 1;
       life--;
-      const display = document.getElementById("display");
-      display.style.background =
+
+      //adding a dynamic transparent red gradient on display
+      displayContainer.style.background =
         "linear-gradient( rgb(0,0,0,0) ,rgb(100,0,0," +
         (1 - life / 5) +
         ")) ,#ddd";
-      console.log(life);
+
+      //now we will check the life . if it zero.  game will over
       if (life == 0) {
+        //ending gameplay to ignore the other keyboard events
         isGamePlayOn = false;
-        const play = document.getElementById("play-ground");
-        play.classList.add("hidden");
-        const result = document.getElementById("result");
-        result.classList.remove("hidden");
-        result.classList.add("flex");
-        const resultNumber = document.getElementById("result-number");
-        const score = document.getElementById("score");
-        resultNumber.innerText = score.innerText;
+
+        //Now hiding the playground and displaying the result
+        playGroundSection.classList.add("hidden");
+        //showing result background
+        resultSection.classList.remove("hidden");
+        resultSection.classList.add("flex");
+        resultCount.innerText = scoreCount.innerText;
       }
     }
   }
 });
 
-document.getElementById("restart-btn").addEventListener("click", function () {
+restartBtn.addEventListener("click", function () {
+  //on Clicking restart gameplay will on
   isGamePlayOn = true;
-  document.getElementById("score").innerText = 0;
-  document.getElementById("life").innerText = 5;
+  //reseting the scores and life
+  scoreCount.innerText = 0;
+  lifeCount.innerText = 5;
   life = 5;
-  const result = document.getElementById("result");
-  result.classList.remove("flex");
-  result.classList.add("hidden");
-  const playGround = document.getElementById("play-ground");
-  playGround.classList.remove("hidden");
-  const display = document.getElementById("display");
+
+  //hiding result
+  resultSection.classList.remove("flex");
+  resultSection.classList.add("hidden");
+
+  // showing playground
+  playGroundSection.classList.remove("hidden");
+
+  // reseting transparent red gradient on display
   display.style.background =
     "linear-gradient( rgb(0,0,0,0) ,rgb(100,0,0,0)) ,#ddd";
 });

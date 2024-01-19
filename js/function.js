@@ -1,9 +1,9 @@
-function getIdText(id) {
+function getTextById(id) {
   const data = document.getElementById(id);
   const text = data.innerText;
   return text;
 }
-function getIdNumber(id) {
+function getNumberById(id) {
   const data = document.getElementById(id);
   const textofData = data.innerText;
   const number = parseInt(textofData);
@@ -13,13 +13,15 @@ function setInnerText(id, value) {
   const data = document.getElementById(id);
   data.innerText = value;
 }
+
 function incrementCount(id) {
-  const number = getIdNumber(id);
+  let number = getNumberById(id);
   number++;
-  setInnerText(id);
+  setInnerText(id, number);
 }
+
 function decrementCount(id) {
-  const number = getIdNumber(id);
+  let number = getNumberById(id);
   number--;
-  setInnerText(id);
+  setInnerText(id, number);
 }

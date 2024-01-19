@@ -74,14 +74,15 @@
         </div>
 
         <!-- game score start  -->
-        <div class="mockup-phone w-3/6 mb-5 block">
-          <div class="camera text-center"></div>
+        <div
+          id="display"
+          class="w-3/6 mx-auto border-8 border-gray-600 rounded-lg"
+        >
           <div
-            id="display"
-            class="display bg-slate-300 phone-1 flex flex-col justify-center h-[300px] items-center"
+            class="bg-gray-300 bg-cover bg-blend-multiply bg-top flex items-center justify-center min-h-[300px]"
           >
             <h1 class="animate-bounce">
-              <span id="screen-text" class="text-[100px] text-bold"></span>
+              <span id="screen-text" class="text-[100px] font-black"></span>
             </h1>
           </div>
         </div>
@@ -149,5 +150,6 @@
     <!-- result End  -->
 
     <script src="./js/index.js"></script>
+    <script src="./js/function.js"></script>
   </body>
 </html>
